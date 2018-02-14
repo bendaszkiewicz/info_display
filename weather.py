@@ -1,5 +1,14 @@
 # weather.py contains functions to call weather and sunrise/sunset API
 
+#TODO Check for internet connection
+
+# Create weather structure
+class WeatherData:
+	def __init__(self,farenheit,celsius,type):
+		self.farenheit = 0;
+		self.celsius = 0;
+		self.type = 0;
+
 # API key and ID for Peoria County, IL for openweathermap.org
 APIkey = "5e859914412e0f7c84e2313be853f88d"
 cityID = "4905697"
@@ -43,6 +52,11 @@ def isDaylight():
 		elif(char.isdigit() and count == 9):
 			# Collect sunset minute
 			sunsetMinute = sunsetMinute + char
+	# Cast these strings to ints for comparison
+	sunriseHour = int(sunriseHour)
+	sunriseMinute = int(sunriseMinute)
+	sunsetHour = int(sunsetHour)
+	sunsetMinute = int(sunsetMinute)
 	
 	## Get current time using time module
 	currentTime = time.gmtime(time.time())
@@ -57,25 +71,25 @@ def isDaylight():
 	# print sunsetHour
 	# print sunsetMinute
 	# print "Current Time"
-	# print currentTime.tm_hour
-	# print currentTime.tm_min
+	# print hour
+	# print minute
 	
 	## If/else comparisons determine if it is dark or not
 	if(hour > sunriseHour and hour < sunsetHour):
 		return True
 	elif(hour < sunriseHour or hour > sunsetHour):
-		return False
+		return False		
 	elif(hour == sunriseHour and minute > sunriseMinute):
-		return False
+		return False		
 	elif(hour == sunriseHour and minute < sunriseMinute):
-		return True
+		return True		
 	elif(hour == sunsetHour and minute > sunsetMinute):
-		return False
+		return False		
 	else:
-		return True
+		return True		
 
-# Returns integer tuple of *C and *F temperatures
-def	getTemperature():
+# Returns WeatherData type with integer *C, *F, and code for weather type 
+def	getWeather():
 	import urllib2
 	import json
 	
@@ -85,29 +99,35 @@ def	getTemperature():
 	jsonResults = urllib2.urlopen(requestURL).read()
 	
 	# Convert JSON to Python object
-	weatherData = json.loads(jsonResults)
+	data = json.loads(jsonResults)
 	
 	## Debug print to console
 	# print "JSON RESULTS"
 	# print jsonResults
 	# print "WEATHER DATA"
-	# print weatherData
+	# print data
 	# print "EXTRACT TEMP"
-	#print weatherData['main']['temp']
+	#print data['main']['temp']
 	
-	## Convert Kelvin value and return tuple with *C and *F
-	kelvin = weatherData['main']['temp']
-	celsius = float(kelvin) - 273.15
-	farenheit = celsius * (9/5) + 32
+	## Create weather object
+	weather = WeatherData(0,0,0)
 	
-	return [int(round(celsius)),int(round(farenheit))]
-
-# Returns weather type as an integer code
-def getWeatherCode():
-	return
+	## Convert and store weather data
+	kelvin = data['main']['temp']
+	weather.celsius = int(round(float(kelvin) - 273.15))
+	weather.farenheit = int(round(weather.celsius * (9/5) + 32))
+	
+	weather.type = data['weather'][0]['id']
+	
+	return weather
 
 # Test code
 print "Is it daylight?"	
 print isDaylight()
-print "Temp [*C,*F]"
-print getTemperature()
+print "Temp *F:"
+test = getWeather()
+print test.farenheit
+print "Temp *C:"
+print test.celsius
+print "Weather type:"
+print test.type
