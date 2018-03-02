@@ -1,4 +1,3 @@
-
 from __future__ import print_function
 import httplib2
 import os
@@ -65,6 +64,7 @@ def main():
     print('Getting the upcoming 10 events')
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
+		timeMax="2018-03-06T10:00:00-06:00",
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
 
