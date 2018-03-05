@@ -74,6 +74,18 @@ def main():
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
 
+		colors = service.colors().get().execute()
+
+		# Print available calendarListEntry colors.
+	for id, color in colors['calendar'].iteritem():
+		print 'colorId: %s' % id
+		print '  Background: %s' % color['background']
+		print '  Foreground: %s' % color['foreground']
+		# Print available event colors.
+	for id, color in colors['event'].iteritem():
+		print 'colorId: %s' % id
+		print '  Background: %s' % color['background']
+		print '  Foreground: %s' % color['foreground']
 
 if __name__ == '__main__':
     main()
