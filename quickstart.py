@@ -61,12 +61,16 @@ def main():
     service = discovery.build('calendar', 'v3', http=http)
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    tomorrow = datetime.date.today() + datetime.timedelta(days=2)
+    #print(datetime.datetime.today()) -- Check :)
+    tomorrow = datetime.datetime.today() + datetime.timedelta(days=2)
+    #tomorrow = tomorrow.strftime('%Y-%m-%d-T10:00:00Z') # now is datetime.. not a string :(
+    print('Tomorrow: ')
     print(tomorrow)
-    print('Getting the upcoming 10 events ... Getting events of: \n' + now)
+    print('\n Getting the upcoming 10 events ... Getting events of: \n' + now)
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
 		#timeMax="2018-03-21T10:00:00-06:00",
+		#timeMax=tomorrow,
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
 	
