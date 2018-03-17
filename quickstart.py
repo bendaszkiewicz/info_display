@@ -61,19 +61,35 @@ def main():
     service = discovery.build('calendar', 'v3', http=http)
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
+    tomorrow = datetime.date.today() + datetime.timedelta(days=2)
+    print(tomorrow)
+    print('Getting the upcoming 10 events ... Getting events of: \n' + now)
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
-		timeMax="2018-03-06T10:00:00-06:00",
+		#timeMax="2018-03-21T10:00:00-06:00",
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
-
+	
     if not events:
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
+		
 
+		
+# colors = service.colors().get().execute()
+
+	# # Print available calendarListEntry colors.
+# for id, color in colors['calendar'].iteritem():
+	# print('colorId: %s' % id)
+	# print('  Background: %s' % color['background'])
+	# print('  Foreground: %s' % color['foreground'])
+	# # Print available event colors.
+# for id, color in colors['event'].iteritem():
+	# print('colorId: %s' % id)
+	# print('  Background: %s' % color['background'])
+	# print('  Foreground: %s' % color['foreground'])
 
 if __name__ == '__main__':
     main()
