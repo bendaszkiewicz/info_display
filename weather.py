@@ -118,16 +118,74 @@ def	getWeather():
 	weather.farenheit = int(round(weather.celsius * (9/5) + 32))
 	
 	weather.type = data['weather'][0]['id']
-	
+
+	print(weather.type)
+
+	## Condense weather type code into a subset of defined weather types:
+	# 0		Clear
+	# 1		Partly Cloudy
+	# 2		Cloudy
+	# 3		Light Rain
+	# 4		Heavy Rain
+	# 5		T-Storm/Lt. Rain
+	# 6		T-Storm/Hvy. Rain
+	# 7		Mix
+	# 8		Light Snow
+	# 9		Heavy Snow
+	# 10	Mist/Fog
+	# 11	Windy
+	# 12	Very Windy
+	# 13	Severe Storm
+	# 14	Tornado
+	# 15	Severe Cold
+	# 16	Severe Heat
+	if(weather.type == 800):
+		weather.type = 0
+	elif(weather.type == 801 or weather.type == 802 or weather.type == 803):
+		weather.type = 1
+	elif(weather.type == 804):
+		weather.type = 2
+	elif(weather.type == 300 or weather.type == 301 or weather.type == 302 or weather.type == 310 or weather.type == 311 or weather.type == 312 or weather.type == 313 or weather.type == 314 or weather.type == 321 or weather.type == 321 or weather.type == 500 or weather.type == 501 or weather.type == 520 or weather.type == 521 or weather.type == 531):
+		weather.type = 3
+	elif(weather.type == 502 or weather.type == 503 or weather.type == 504 or weather.type == 522):
+		weather.type = 4
+	elif(weather.type == 200 or weather.type == 201 or weather.type == 210 or weather.type == 230 or weather.type == 231 or weather.type == 232):
+		weather.type = 5
+	elif(weather.type == 202 or weather.type == 211 or weather.type == 212 or weather.type == 221):
+		weather.type = 6
+	elif(weather.type == 511 or weather.type == 611 or weather.type == 612 or weather.type == 615 or weather.type == 616):
+		weather.type = 7
+	elif(weather.type == 600 or weather.type == 620):
+		weather.type = 8
+	elif(weather.type == 601 or weather.type == 602 or weather.type == 621 or weather.type == 622):
+		weather.type = 9
+	elif(weather.type == 701 or weather.type == 721 or weather.type == 741):
+		weather.type = 10
+	elif(weather.type == 956 or weather.type == 957 or weather.type == 958):
+		weather.type = 11
+	elif(weather.type == 905 or weather.type == 959):
+		weather.type = 12
+	elif(weather.type == 960 or weather.type == 961):
+		weather.type = 13
+	elif(weather.type == 781 or weather.type == 900):
+		weather.type = 14
+	elif(weather.type == 903):
+		weather.type = 15
+	elif(weather.type == 904):
+		weather.type = 16
+	else:
+		weather.type = -1
+		print("error identifying weather type")
+		
 	return weather
 
-# Test code
-print "Is it daylight?"	
-print isDaylight()
-print "Temp *F:"
-test = getWeather()
-print test.farenheit
-print "Temp *C:"
-print test.celsius
-print "Weather type:"
-print test.type
+## Test code
+# print "Is it daylight?"	
+# print isDaylight()
+# print "Temp *F:"
+# test = getWeather()
+# print test.farenheit
+# print "Temp *C:"
+# print test.celsius
+# print "Weather type:"
+# print test.type
