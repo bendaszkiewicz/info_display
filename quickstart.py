@@ -62,7 +62,10 @@ def main():
 
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
     #print(datetime.datetime.today()) -- Check :)
-    tomorrow = datetime.datetime.today() + datetime.timedelta(days=2)
+    tomorrow = datetime.datetime.today() + datetime.timedelta(days=1)
+    tomorrow = str(tomorrow)
+    tomorrow = tomorrow.replace(" ", "T") + 'Z'
+
     #tomorrow = tomorrow.strftime('%Y-%m-%d-T10:00:00Z') # now is datetime.. not a string :(
     print('Tomorrow: ')
     print(tomorrow)
@@ -70,7 +73,7 @@ def main():
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
 		#timeMax="2018-03-21T10:00:00-06:00",
-		#timeMax=tomorrow,
+		timeMax=tomorrow,
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
 	
@@ -82,18 +85,18 @@ def main():
 		
 
 		
-# colors = service.colors().get().execute()
+    colors = service.colors().get().execute()
 
 	# # Print available calendarListEntry colors.
-# for id, color in colors['calendar'].iteritem():
-	# print('colorId: %s' % id)
-	# print('  Background: %s' % color['background'])
-	# print('  Foreground: %s' % color['foreground'])
-	# # Print available event colors.
-# for id, color in colors['event'].iteritem():
-	# print('colorId: %s' % id)
-	# print('  Background: %s' % color['background'])
-	# print('  Foreground: %s' % color['foreground'])
+    for id, color in colors['calendar'].items():
+    	 print('colorId: %s' % id)
+    	 print('  Background: %s' % color['background'])
+    	 print('  Foreground: %s' % color['foreground'])
+    	# # Print available event colors.
+    for id, color in colors['event'].items():
+    	 print('colorId: %s' % id)
+    	 print('  Background: %s' % color['background'])
+    	 print('  Foreground: %s' % color['foreground'])
 
 if __name__ == '__main__':
     main()
