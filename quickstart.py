@@ -69,7 +69,7 @@ def main():
     #tomorrow = tomorrow.strftime('%Y-%m-%d-T10:00:00Z') # now is datetime.. not a string :(
     print('Tomorrow: ')
     print(tomorrow)
-    print('\n Getting the upcoming 10 events ... Getting events of: \n' + now)
+    print('\nGetting the upcoming 10 events ... Getting events of: \n' + now + '\n')
     eventsResult = service.events().list(
         calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
 		#timeMax="2018-03-21T10:00:00-06:00",
@@ -82,21 +82,38 @@ def main():
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
+        # event['summary'] is the name of the event #
+		
+        print(start)
+        today_day = start[0:10]
+        print(today_day, "today_day")
+        # today_day is the date for the current day #
+		
+        today_start = start[11:19]
+        # print(today_start, "today_start")
+        # timeoffset = int(today_start[0:2]) - 2
+        # print(timeoffset, "timeoffset")
+        print(today_start, "today_start")
+		# today_start is the start time for the event #
+        
+		
+		
+        #print(event['color'])
 		
 
 		
-    colors = service.colors().get().execute()
+    # colors = service.colors().get().execute()
 
-	# # Print available calendarListEntry colors.
-    for id, color in colors['calendar'].items():
-    	 print('colorId: %s' % id)
-    	 print('  Background: %s' % color['background'])
-    	 print('  Foreground: %s' % color['foreground'])
-    	# # Print available event colors.
-    for id, color in colors['event'].items():
-    	 print('colorId: %s' % id)
-    	 print('  Background: %s' % color['background'])
-    	 print('  Foreground: %s' % color['foreground'])
+	# # # Print available calendarListEntry colors.
+    # for id, color in colors['calendar'].items():
+    	 # print('colorId: %s' % id)
+    	 # print('  Background: %s' % color['background'])
+    	 # print('  Foreground: %s' % color['foreground'])
+    	# # # Print available event colors.
+    # for id, color in colors['event'].items():
+    	 # print('colorId: %s' % id)
+    	 # print('  Background: %s' % color['background'])
+    	 # print('  Foreground: %s' % color['foreground'])
 
 if __name__ == '__main__':
     main()
