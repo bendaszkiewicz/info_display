@@ -1,6 +1,8 @@
 # Import modules needed
 from appJar import *
 from weather import *
+from PIL import Image, ImageTk
+from tkinter import *
 
 #Specify the degree symbol
 degreeSign= u'\N{DEGREE SIGN}' + " F"
@@ -16,13 +18,14 @@ home = gui()
 home.setTitle("Welcome to IiD")
 home.setSize("fullscreen")
 # Create and set a default weather icon
-weatherIconCanvas = home.canvas("weatherIcon")
-home.addCanvasImage("weatherIcon", 400, 400, "images/home_weather_icons/sun_icon" + imgExt)
-# Place a default label for temperature display
-home.addLabel("temperature","0" + degreeSign)
-temperature = home.getLabelWidget("temperature")
-temperature.config(font="Courier 36")
+homeCanvas = home.addCanvas("homeCanvas")
+home.setCanvasWidth("homeCanvas", 1920)
+home.setCanvasHeight("homeCanvas",1080)
 
+background = ImageTk.PhotoImage(file="images/home_backgrounds/night_rain" + imgExt)
+image = ImageTk.PhotoImage(file="images/home_weather_icons/sun_icon" + imgExt)
+canvasBackground = homeCanvas.create_image(0, 0, anchor='nw', image=background)
+icon = homeCanvas.create_image(990, 540,  anchor='center', image=image)
 
 #Set background based on time of day and weather
 #TODO create cloudy background for day and night
@@ -41,48 +44,54 @@ def displayWeather():
 	# If it is daylight, select the weather condition
 	if(isDaylight()):
 		if(weatherType == 0):
-			home.removeBgImage()
-			home.setBgImage("images/home_backgrounds/day_clear" + imgExt)
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/day_clear" + imgExt)
+			canvasBackground = homeCanvas.create_image(0, 0, anchor='nw', image=background)
 		elif(weatherType == 1 or weatherType == 2):
-			home.removeBgImage()
-			home.setBgImage("images/home_backgrounds/day_cloudy" + imgExt)
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/day_cloudy" + imgExt)
 		elif(weatherType == 3 or weatherType == 4 or weatherType == 5 or weatherType == 6 or weatherType == 7 or weatherType == 8 or weatherType == 9 or weatherType == 10 or weatherType == 11 or weatherType == 12 or weatherType == 13 or weatherType == 14 or weatherType == 15 or weatherType == 16):
-			home.removeBgImage()
-			home.setBgImage("images/home_backgrounds/day_rain" + imgExt)
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/day_rain" + imgExt)
 		else:
 			print("background failed to load properly")
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/night_rain" + imgExt)
 	# If it is not daylight, select the weather condition	
 	else:
 		if(weatherType == 0):
-			home.removeBgImage()
-			home.setBgImage("images/home_backgrounds/night_clear" + imgExt)
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/night_clear" + imgExt)
+			canvasBackground = homeCanvas.create_image(0, 0, anchor='nw', image=background)
 		elif(weatherType == 1 or weatherType == 2):
-			home.removeBgImage()
-			home.setBgImage("images/home_backgrounds/night_cloudy" + imgExt)
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/night_cloudy" + imgExt)
 		elif(weatherType == 3 or weatherType == 4 or weatherType == 5 or weatherType == 6 or weatherType == 7 or weatherType == 8 or weatherType == 9 or weatherType == 10 or weatherType == 11 or weatherType == 12 or weatherType == 13 or weatherType == 14 or weatherType == 15 or weatherType == 16):
-			home.removeBgImage()
-			home.setBgImage("images/home_backgrounds/night_rain" + imgExt)
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/night_rain" + imgExt)
 		else:
 			print("background failed to load properly")
+			background = ImageTk.PhotoImage(file="images/home_backgrounds/night_rain" + imgExt)
+
+	#canvasBackground = homeCanvas.create_image(0, 0, anchor='nw', image=background)
 
 	## Display weather icon
-	#TODO finish more weather icons and add in code
+	#TODO finish more weather icons and add in code 
 	if(weatherType == 0):
-		home.setImage("weatherIcon", "images/home_weather_icons/sun_icon" + imgExt)
+		weatherIcon = ImageTk.PhotoImage(file="images/home_weather_icons/sun_icon" + imgExt)
 	elif(weatherType == 1 or weatherType == 2):
-		home.setImage("weatherIcon", "images/home_weather_icons/cloud" + imgExt)
+		weatherIcon = ImageTk.PhotoImage(file="images/home_weather_icons/cloud" + imgExt)
 	elif(weatherType == 3):
-		home.setImage("weatherIcon","images/home_weather_icons/rain" + imgExt)
+		weatherIcon = ImageTk.PhotoImage(file="images/home_weather_icons/rain" + imgExt)
 	elif(weatherType == 4):
-		home.setImage("weatherIcon", "images/home_weather_icons/heavy_rain" + imgExt)
+		weatherIcon = ImageTk.PhotoImage(file="images/home_weather_icons/heavy_rain" + imgExt)
 	elif(weatherType == 5 or weatherType == 6):
-		home.setImage("weatherIcon", "images/home_weather_icons/t_storm" + imgExt)
+		weatherIcon = ImageTk.PhotoImage(file="images/home_weather_icons/t_storm" + imgExt)
 	else:
-		home.setImage("weatherIcon", "images/home_weather_icons/snow" + imgExt)
+		weatherIcon = ImageTk.PhotoImage(file="images/home_weather_icons/snow" + imgExt)
+
+	#canvasWeatherIcon = homeCanvas.create_image(990, 540,  anchor='center', image=weatherIcon)
 
 	## Display the temperature
-	home.setLabel("temperature",str(farenheit) + degreeSign)
-			
+	temperature = homeCanvas.create_text(990, 900, text =str(farenheit) + degreeSign, anchor="center", justify="center", font="Courier 36", fill="white")
+
+def test():
+	print("asdfasdf")
+
 #Start the app
 displayWeather()
+homeCanvas.tag_bind(icon, "<Button-1>", test)
 home.go()

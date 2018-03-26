@@ -19,14 +19,17 @@ locationLng = -89.6168495
 # Returns boolean. True if it is daylight out at Jobst Hall. False if dark there. 
 def isDaylight():
 	import time
-	import urllib2
+	import urllib3
+	
+	# Create pool manager to automatically handle pooling and thread management
+	http = urllib3.PoolManager()
 	
 	## Get sunrise and sunset hours and minutes (UTC) from sunrise-sunset.org API
 	#request URL built from latitude, longitude, date, and formatting
 	# Reference: https://sunrise-sunset.org/api
 	requestURL = "https://api.sunrise-sunset.org/json?lat=" + str(locationLat) + "&lng=" + str(locationLng) + "&date=today&formatted=0"
 	
-	jsonResults = urllib2.urlopen(requestURL).read()
+	jsonResults = http.request('GET', requestURL).data.decode('utf-8')
 	
 	## Process returned JSON data
 	# Counting variable keeps track of which time element is being retrieved from the JSON results
@@ -64,15 +67,15 @@ def isDaylight():
 	minute = currentTime.tm_min
 	
 	## Debug print to console
-	# print "Sunrise"
-	# print sunriseHour
-	# print sunriseMinute
-	# print "Sunset"
-	# print sunsetHour
-	# print sunsetMinute
-	# print "Current Time"
-	# print hour
-	# print minute
+	# print("Sunrise")
+	# print(sunriseHour)
+	# print(sunriseMinute)
+	print("Sunset")
+	print(sunsetHour)
+	print(sunsetMinute)
+	print("Current Time")
+	print(hour)
+	print(minute)
 	
 	## If/else comparisons determine if it is dark or not
 	if(hour > sunriseHour and hour < sunsetHour):
@@ -90,13 +93,16 @@ def isDaylight():
 
 # Returns WeatherData type with integer *C, *F, and code for weather type 
 def	getWeather():
-	import urllib2
+	import urllib3
 	import json
+
+	# Create pool manager to automatically handle pooling and thread management
+	http = urllib3.PoolManager()
 	
 	## Get weather JSON data by building URL request from global openweathermap.org variables
 	# Build request URL and send request
 	requestURL = "http://api.openweathermap.org/data/2.5/weather?id=" + cityID + "&APPID=" + APIkey
-	jsonResults = urllib2.urlopen(requestURL).read()
+	jsonResults = http.request('GET', requestURL).data.decode('utf-8')
 	
 	# Convert JSON to Python object
 	data = json.loads(jsonResults)
