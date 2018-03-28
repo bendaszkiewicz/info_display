@@ -76,44 +76,33 @@ def main():
 		timeMax=tomorrow,
         orderBy='startTime').execute()
     events = eventsResult.get('items', [])
+    #print(events, "events")
+	
 	
     if not events:
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
+        # more = event['start'].get('
+        # print(more)
         print(start, event['summary'])
-        # event['summary'] is the name of the event #
-		
-        print(start)
-        today_day = start[0:10]
-        print(today_day, "today_day")
-        # today_day is the date for the current day #
-		
-        today_start = start[11:19]
-        # print(today_start, "today_start")
-        # timeoffset = int(today_start[0:2]) - 2
-        # print(timeoffset, "timeoffset")
-        print(today_start, "today_start")
-		# today_start is the start time for the event #
         
 		
 		
-        #print(event['color'])
+        event_title = [event['summary']]
+        # event['summary'] is the name of the event #
+        print("event title: ", event['summary'])
 		
-
+        today_day = start[0:10]
+        print("today day:", today_day)
+        # today_day is the date for the current day #
 		
-    # colors = service.colors().get().execute()
-
-	# # # Print available calendarListEntry colors.
-    # for id, color in colors['calendar'].items():
-    	 # print('colorId: %s' % id)
-    	 # print('  Background: %s' % color['background'])
-    	 # print('  Foreground: %s' % color['foreground'])
-    	# # # Print available event colors.
-    # for id, color in colors['event'].items():
-    	 # print('colorId: %s' % id)
-    	 # print('  Background: %s' % color['background'])
-    	 # print('  Foreground: %s' % color['foreground'])
+        event_start = start[11:19]
+        print("event start:", event_start)
+		# event_start is the start time for the event #
+        
+        #return(event['summary'],event_start)
+		#clear this statement & implement into section where it's called#
 
 if __name__ == '__main__':
     main()
