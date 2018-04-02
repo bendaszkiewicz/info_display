@@ -83,23 +83,29 @@ def main():
         print('No upcoming events found.')
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        # more = event['start'].get('
-        # print(more)
-        print(start, event['summary'])
+        end = event['end'].get('dateTime',event['end'].get('date'))
+		
+		
+        print('\n', start, event['summary'])
+
+        print('\n end:', end, '\n')
         
 		
 		
         event_title = [event['summary']]
         # event['summary'] is the name of the event #
-        print("event title: ", event['summary'])
+        print("event title:", event['summary'])
 		
         today_day = start[0:10]
         print("today day:", today_day)
         # today_day is the date for the current day #
 		
-        event_start = start[11:19]
-        print("event start:", event_start)
+        time_start = start[11:19]
+        print("time start:", time_start)
 		# event_start is the start time for the event #
+
+        time_end = end[11:19]
+        print("time end:", time_end)
         
         #return(event['summary'],event_start)
 		#clear this statement & implement into section where it's called#
