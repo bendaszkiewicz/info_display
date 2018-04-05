@@ -1,6 +1,7 @@
 # weather.py contains functions to call weather and sunrise/sunset API
 
 #TODO Check for internet connection
+#TODO make option for CST vs CDT
 
 # Create weather structure
 class WeatherData:
@@ -60,23 +61,40 @@ def isDaylight():
 	sunriseMinute = int(sunriseMinute)
 	sunsetHour = int(sunsetHour)
 	sunsetMinute = int(sunsetMinute)
+
+	# Convert to CDT
+	if (sunriseHour-5) <= 0:
+		sunriseHour = sunriseHour - 5 + 24
+	else:
+		sunriseHour -= 5
+
+	if(sunsetHour-5) <= 0:
+		sunsetHour = sunsetHour - 5 + 24
+	else:
+		sunsetHour -= 5
 	
 	## Get current time using time module
 	currentTime = time.gmtime(time.time())
 	hour = currentTime.tm_hour
 	minute = currentTime.tm_min
-	
+
+	# Convert current time to CDT
+	if(hour-5) <= 0:
+		hour = hour - 5 + 24
+	else:
+		hour -= 5
+
 	## Debug print to console
 	# print("Sunrise")
 	# print(sunriseHour)
 	# print(sunriseMinute)
-	print("Sunset")
-	print(sunsetHour)
-	print(sunsetMinute)
-	print("Current Time")
-	print(hour)
-	print(minute)
-	
+	#print("Sunset")
+	#print(sunsetHour)
+	#print(sunsetMinute)
+	#print("Current Time")
+	#print(hour)
+	#print(minute)
+
 	## If/else comparisons determine if it is dark or not
 	if(hour > sunriseHour and hour < sunsetHour):
 		return True
