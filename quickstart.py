@@ -107,9 +107,9 @@ def main():
         time_end = end[11:19]
         print("time end:", time_end)
 	
-	try:
-		color_ID = event['colorId']
-        	print("ColorId:", color_ID)
+        try:
+	        color_ID = event['colorId']
+	        print("ColorId:", color_ID)
         except:
 	        color_ID = 5
 	        print("ColorId:", color_ID)
