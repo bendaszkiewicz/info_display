@@ -47,7 +47,7 @@ def get_credentials():
 		print('Storing credentials to ' + credential_path)
 	return credentials
 
-def main():
+def main(): #day_wanted
 	"""Shows basic usage of the Google Calendar API.
 	Creates a Google Calendar API service object and outputs a list of the next
 	10 events on the user's calendar.
@@ -56,17 +56,30 @@ def main():
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('calendar', 'v3', http=http)
 
+	##if (day_wanted != none): #day_wanted is not null
+	##	now = day_wanted
+	##else:
+		#now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 	now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-	#print(datetime.datetime.today()) -- Check :)
-	tomorrow = datetime.datetime.utcnow() + datetime.timedelta(days=1)
-	tomorrow = str(tomorrow)
-	tomorrow = tomorrow.replace(" ", "T") + 'Z'
+	morning = str(now)
+	morning = morning[0:11]
+	#utc is 5 hours in the future.
+	morning = (morning + '01:00:00.00Z')
+	#morning is now at 6AM (central)
+	print('Morning: ')
+	print(morning)
+	
+	night = morning[:11] + '23:59' + morning[16:]
+	#text = text[:8] + "slept" + text[11:]
+	#tomorrow = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+	#tomorrow = str(tomorrow)
+	#tomorrow = tomorrow.replace(" ", "T") + 'Z'
 
 	#tomorrow = tomorrow.strftime('%Y-%m-%d-T10:00:00Z') # now is datetime.. not a string :(
-	print('Tomorrow: ')
-	print(tomorrow)
-	print('\nGetting the upcoming 10 events ... Getting events of: \n' + now + '\n')
-	eventsResult = service.events().list(calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,timeMax=tomorrow,orderBy='startTime').execute()
+	print('Night: ')
+	print(night)
+	print('\nGetting the upcoming 10 events ... Getting events of: \n' + morning + '\n')
+	eventsResult = service.events().list(calendarId='primary', timeMin=morning, maxResults=10, singleEvents=True,timeMax=night,orderBy='startTime').execute()
 	events = eventsResult.get('items', [])
 	#print(events, "events")
 	
