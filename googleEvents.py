@@ -47,7 +47,7 @@ def get_credentials():
 		print('Storing credentials to ' + credential_path)
 	return credentials
 
-def main(): #day_wanted
+def main(day_wanted): 
 	"""Shows basic usage of the Google Calendar API.
 	Creates a Google Calendar API service object and outputs a list of the next
 	10 events on the user's calendar.
@@ -56,11 +56,11 @@ def main(): #day_wanted
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('calendar', 'v3', http=http)
 
-	##if (day_wanted != none): #day_wanted is not null
-	##	now = day_wanted
-	##else:
-		#now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-	now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+	if (day_wanted != None): #day_wanted is not null
+		now = day_wanted.isoformat() + 'Z'
+	else:
+		now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+	#now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
 	morning = str(now)
 	morning = morning[0:11]
 	#utc is 5 hours in the future.
@@ -86,6 +86,12 @@ def main(): #day_wanted
 	
 	if not events:
 		print('No upcoming events found.')
+
+	# Create list to return to home.py function
+	returnedEventList = []
+	returnedEvent = ['title', 'start', 'end', 'color']
+
+	# Loop through events, compiling returned list
 	for event in events:
 		start = event['start'].get('dateTime', event['start'].get('date'))
 		end = event['end'].get('dateTime',event['end'].get('date'))
@@ -95,11 +101,10 @@ def main(): #day_wanted
 
 		print('\n end:', end, '\n')
 		
-		
-		
 		event_title = [event['summary']]
 		# event['summary'] is the name of the event #
 		print("event title:", event['summary'])
+		returnedEvent[0] = str(event['summary'])
 		
 		today_day = start[0:10]
 		print("today day:", today_day)
@@ -108,16 +113,24 @@ def main(): #day_wanted
 		time_start = start[11:19]
 		print("time start:", time_start)
 		# event_start is the start time for the event #
+		returnedEvent[1] = time_start
 
 		time_end = end[11:19]
 		print("time end:", time_end)
+		returnedEvent[2] = time_end
 	
 		try:
 			color_ID = event['colorId']
 			print("ColorId:", color_ID)
+			returnedEvent[3] = color_ID
 		except:
 			color_ID = 5
 			print("ColorId:", color_ID)
+			returnedEvent[3] = 5
+
+		returnedEventList.append(returnedEvent[0:])
+
+	return returnedEventList
 		
 		#return(event['summary'],event_start)
 		#clear this statement & implement into section where it's called#
