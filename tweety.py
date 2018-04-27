@@ -1,6 +1,7 @@
 import twitter
+from datetime import date, time, datetime
 
-def getTweets(): 
+def getTweets(numTweets): 
 
 	#"You can get all 4 by heading over to # https://apps.twitter.com. #
 
@@ -23,7 +24,7 @@ def getTweets():
 	  
 	#print(api.VerifyCredentials())
 	  
-	t = api.GetUserTimeline(screen_name="akras14", count=5) #Put username here, can change count
+	t = api.GetUserTimeline(screen_name="MaliLabNews", count=numTweets) #Put username here, can change count
 	  
 
 	  #"The following command uses list comprehension 
@@ -33,9 +34,9 @@ def getTweets():
 	  # -(@akras14)
 	  
 	tweets = [i.AsDict() for i in t]
-
 	returnedTweet = ['time','text']
 	returnedTweetsList = []
+	status = 4
 
 	for t in tweets:
 		#print('\n', t['id'], t['text'])
@@ -43,22 +44,24 @@ def getTweets():
 		#print(t['text'] + '\n')
 		text = t['text']
 		text = text.encode('ascii', 'ignore')
-		returnedTweet[0] = t['created_at']
+		tempTime = t['created_at']
+		tempTime = datetime.strptime(tempTime, '%a %b %d %H:%M:%S %z %Y')
+		returnedTweet[0] = datetime.strftime(tempTime, '%A, %B %d, %Y')
 		returnedTweet[1] = text
 
 		#Below, searches each tweet and updates status
 		#technically last tweet will change the last status
-		if (t['text'].find("*Available")):
-			status = 3;
+		if (t['text'].find("*Available")) != -1:
+			status = 3
 			#Status 3 = Available
-		if (t['text'].find("*Busy")):
-			status = 2;
+		if (t['text'].find("*Busy")) != -1:
+			status = 2
 			#Status 2 = Busy
-		if (t['text'].find("*Away")):
-			status = 1;
+		if (t['text'].find("*Away")) != -1:
+			status = 1
 			#Status 1 = Away
-		if (t['text'].find("*hide")) or (t['text'].find("*offline")):
-			status = 0;
+		if (t['text'].find("*hide")) != -1 and (t['text'].find("*offline")) != -1:
+			status = 0
 			#Status 0 = Hide availability meter
 
 		returnedTweetsList.append(returnedTweet[0:])
