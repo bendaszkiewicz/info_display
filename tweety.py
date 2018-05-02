@@ -17,10 +17,10 @@ def getTweets(numTweets):
 	# Consumer Key/Secret and Access Token/Secret."
 	# - (@akras14)
 
-	api = twitter.Api(consumer_key='wJ5qIbnmho7fxnT2GEth2K1qi', #Fill in -- Replace with user twitter keys
-	  consumer_secret='nT1AcZ8vL2UVD3wrtgvO96j3n5rOeUPtCQxBUPs07jHDujBwkk', #Fill in
-	  access_token_key='101409260-tX23vQsxtvfx6p4J7gzymYHBqTlItUItCP7HegSb', #Fill in
-	  access_token_secret='67JWctaCdWQmvyqLkU1uDf1Z5ybVNlTJ3wjt42k6uLhsv') #fill in
+	api = twitter.Api(consumer_key='xyz', #Fill in -- Replace with user twitter keys
+	  consumer_secret='xyz', #Fill in
+	  access_token_key='xyzb', #Fill in
+	  access_token_secret='xyz') #fill in
 	  
 	#print(api.VerifyCredentials())
 	  
